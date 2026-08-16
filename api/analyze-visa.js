@@ -11,9 +11,14 @@ export default async function handler(req, res) {
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
+    const similarKeys = Object.keys(process.env).filter((k) => k.toUpperCase().includes("ANTHROPIC"));
+    const allKeysCount = Object.keys(process.env).length;
     return res.status(500).json({
       valid: false,
-      notes: "На сервере не настроен ANTHROPIC_API_KEY. Добавьте переменную окружения в настройках хостинга.",
+      notes:
+        "На сервере не настроен ANTHROPIC_API_KEY. Добавьте переменную окружения в настройках хостинга. " +
+        "[Диагностика: похожих переменных найдено — " + JSON.stringify(similarKeys) +
+        "; всего переменных окружения на сервере — " + allKeysCount + "]",
     });
   }
 
